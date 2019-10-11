@@ -1,7 +1,7 @@
 {
-  "name": "phaser3-project-template",
+  "name": "frequency-fighter",
   "version": "1.1.0",
-  "description": "A Phaser 3 Project Template",
+  "description": "A game developed with Phaser 3",
   "main": "src/index.js",
   "scripts": {
     "build": "webpack --config webpack/prod.js ",
@@ -9,15 +9,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/photonstorm/phaser3-project-template.git"
+    "url": "git+https://github.com/crafty/frequency-fighter"
   },
-  "author": "Richard Davey <rdavey@gmail.com> (http://www.photonstorm.com)",
+  "author": "Dan Craycraft <shout@dancraycraft.dev> (http://www.dancraycraft.dev)",
   "license": "MIT",
   "licenseUrl": "http://www.opensource.org/licenses/mit-license.php",
-  "bugs": {
-    "url": "https://github.com/photonstorm/phaser3-project-template/issues"
-  },
-  "homepage": "https://github.com/photonstorm/phaser3-project-template#readme",
   "devDependencies": {
     "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.2.3",
@@ -33,6 +29,9 @@
     "webpack-merge": "^4.2.1"
   },
   "dependencies": {
-    "phaser": "^3.16.2"
+    "lodash": "^4.17.15",
+    "phaser": "^3.16.2",
+    "realtime-bpm-analyzer": "^1.1.2",
+    "tone": "^13.8.25"
   }
 }
