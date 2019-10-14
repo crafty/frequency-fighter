@@ -1,4 +1,4 @@
-import RealTimeBPMAnalyzer from 'realtime-bpm-analyzer';
+import RealTimeBPMAnalyzer from "realtime-bpm-analyzer";
 //const Tone = require("Tone");
 
 class MusicManager {
@@ -20,7 +20,7 @@ class MusicManager {
     const { destination } = context;
 
     /* Start the song so we have an audio source as an input for nodes */
-    scene.sound.play('drake', { loop: true, volume: 0 });
+    scene.sound.play("drake", { loop: true, volume: 0 });
 
     /* 
       Audio Analyser 
@@ -38,8 +38,6 @@ class MusicManager {
 
     this.dataArray = new Uint8Array(this.bufferLength); // To retrieve the data call the data collection method getByteTimeDomainData
 
-    this.graphics = scene.add.graphics();
-
     /*
       Audio Tempo Processor
     */
@@ -47,13 +45,13 @@ class MusicManager {
       scriptNode: {
         bufferSize: 4096,
         numberOfInputChannels: 1,
-        numberOfOutputChannels: 1,
+        numberOfOutputChannels: 1
       },
       pushTime: 2000,
       pushCallback: (err, bpm) => {
         // if (err) console.log(err);
         // console.log("bpm", bpm);
-      },
+      }
     });
 
     const scriptProcessorNode = scene.sound.context.createScriptProcessor(
@@ -82,77 +80,53 @@ class MusicManager {
     //   console.log("test");
     //   //this.scene.sound.play("tock", { volume: 1.5 });
     // }, "8n");
+
+    /* Generate Stars */
+    this.generateStars();
   }
 
-  generateStars(points) {
+  generateStars() {
     /* Generate Random Circles (Star Test) On Screen */
     this.graphic = this.scene.add.graphics({ fillStyle: { color: 0xfaf9f9 } });
-    this.starSize = 10;
-    let points = [];
+    let starSize = 10,
+      numberOfStars = 100,
+      counter = 0,
+      protection = 10000,
+      overlapping = false,
+      star = null,
+      newStars = [],
+      stars = [];
 
-    for (var i = 0; i < 100; i++) {
-      const { x, y } = this.generateStars(points);
-      points.push(new Phaser.Geom.Circle(x, y, this.starSize));
+    while (stars.length < numberOfStars && counter < protection) {
+      star = {
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        r: starSize
+      };
+
+      overlapping = false;
+
+      stars.forEach(item => {
+        let distance = Phaser.Math.Between(star.x, star.y, item.x, item.y);
+        if (distance < star.r + item.r) {
+          // They are overlapping
+          console.log("overlapping");
+          overlapping = true;
+          // do not add to array
+        }
+      });
+
+      // add valid circles to array
+      if (!overlapping) {
+        console.log(star);
+        stars.push(star);
+        const newStar = new Phaser.Geom.Circle(star.x, star.y, star.r);
+        console.log(newStar);
+        this.graphic.fillCircleShape(newStar);
+      }
+      console.log(counter);
+      counter++;
     }
-
-    points.forEach(point => {
-      this.graphic.fillCircleShape(point);
-    });
-
-    this.graphic.setAlpha(0.2);
-
-    // let x;
-    // points.forEach(cords => {
-    //   let tempX = Math.floor(Math.random() * window.innerWidth);
-    //   if (tempX < cords.x + 20 && tempX > cords.x - 20) {
-    //     tempX = Math.floor(Math.random() * window.innerWidth);
-    //   }
-    //   x = tempX;
-    // });
-    // let y;
-    // points.forEach(cords => {
-    //   let tempY = Math.floor(Math.random() * window.innerHeight);
-    //   if (tempY < cords.y + 20 && tempY > cords.y - 20) {
-    //     tempY = Math.floor(Math.random() * window.innerHeight);
-    //   }
-    //   y = tempY;
-    // });
-
-    // points.forEach(cords => {
-    //   if (cords.x === x && cords.y === y) {
-    //     x = Math.floor(Math.random() * window.innerWidth);
-    //     y = Math.floor(Math.random() * window.innerHeight);
-    //   }
-    // });
-
-    //let y;
-    //const possibleYpoints = points.map(cords => cords.y);
-
-    //let x;
-    //const possibleXpoints = points.map(cords => cords.x);
-
-    // x = Math.floor(Math.random() * window.innerWidth);
-    // y = Math.floor(Math.random() * window.innerHeight);
-
-    // let overlaping = false;
-    // points.forEach(cords => {
-    //   if (x === cords.x) {
-    //     console.log('overlap x: ', x, cords.x);
-    //     x += 20
-    //   }
-    // });
-
-    // do {
-    //   let x = Math.floor(Math.random() * window.innerWidth);
-    // } while (possibleXpoints.every(cord => x < cord + 20 && x > cord - 20));
-
-    //console.log(possibleXpoints.every(cord => x < cord + 20 && x > cord - 20));
-
-    // do {
-    //   y = Math.floor(Math.random() * window.innerHeight);
-    // } while (possibleYpoints.some(cord => y < cord + 10 && y > cord - 10));
-
-    return { x, y };
   }
 
   update() {
@@ -179,7 +153,7 @@ class MusicManager {
       if (value < 0.5 && value > 0.3) opacity = 0.3;
       if (value < 0.3) opacity = 0.1;
 
-      this.graphic.setAlpha(opacity);
+      //this.graphic.setAlpha(opacity);
     }
   }
 }
