@@ -9,57 +9,109 @@ class Stars extends GameObjects.TileSprite {
     console.log(this);
   }
 
+  generateStars({ numberOfStars, starSize, spaceBetween }) {
+    /* Generate Random Circles (Star Test) On Screen */
+    let starField = this.scene.add.graphics({
+      fillStyle: { color: 0xfaf9f9 }
+    });
+
+    /* Init Vars */
+    let counter = 0,
+      protection = 15000,
+      overlapping = false,
+      star = null,
+      stars = [];
+
+    /* Loop and generate stars until the amount is reached */
+    while (stars.length < numberOfStars && counter < protection) {
+      star = {
+        x: Math.random() * window.innerWidth * 2.5,
+        y: Math.random() * window.innerHeight * 2.5,
+        r: starSize
+      };
+
+      overlapping = false;
+
+      /* Loop over generated stars and check if any overlap with the new star */
+      stars.forEach(item => {
+        let distance = Phaser.Math.Distance.Between(
+          star.x,
+          star.y,
+          item.x,
+          item.y
+        );
+        if (distance < starSize + spaceBetween) {
+          overlapping = true;
+          return;
+        }
+      });
+
+      /* Add the star to the stars list and render it to the screen */
+      if (!overlapping) {
+        stars.push(star);
+        const newStar = new Phaser.Geom.Circle(star.x, star.y, star.r);
+        starField.fillCircleShape(newStar);
+      }
+      counter++;
+    }
+    return starField;
+  }
+
   paralaxStars() {
     const { x, y } = this.scene.player.body.velocity;
-    const backgroundSpeedReducer = 80;
-    const foreGroundSpeedReducer = 40;
-    const midGroundSpeedReducer = 60;
-    const tippyTopReducer = 55;
+    const { starfieldBack, starfieldMid, starfieldFront } = this;
+    const backDamper = 90;
+    const midDamper = 60;
+    const frontDamper = 30;
 
+    /* Paralax stars if the player moves on the X axis */
     if (x !== 0) {
-      if (x > 0) {
-        this.starsBack.x -= x / backgroundSpeedReducer;
-        this.starsFront.x -= x / foreGroundSpeedReducer;
-        this.starsMid.x -= x / midGroundSpeedReducer;
-        this.starsTippyTop.x -= x / tippyTopReducer;
-      }
-      if (x < 0) {
-        this.starsBack.x -= x / backgroundSpeedReducer;
-        this.starsFront.x -= x / foreGroundSpeedReducer;
-        this.starsMid.x -= x / midGroundSpeedReducer;
-        this.starsTippyTop.x -= x / tippyTopReducer;
-      }
+      starfieldBack.x -= x / backDamper;
+      starfieldMid.x -= x / midDamper;
+      starfieldFront.x -= x / frontDamper;
     }
-
+    /* Paralax stars if the player moves on the Y axis */
     if (y !== 0) {
-      if (y < 0) {
-        this.starsBack.y -= y / backgroundSpeedReducer;
-        this.starsFront.y -= y / foreGroundSpeedReducer;
-        this.starsMid.y -= y / midGroundSpeedReducer;
-        this.starsTippyTop.y -= y / tippyTopReducer;
-      }
-      if (y > 0) {
-        this.starsBack.y -= y / backgroundSpeedReducer;
-        this.starsFront.y -= y / foreGroundSpeedReducer;
-        this.starsMid.y -= y / midGroundSpeedReducer;
-        this.starsTippyTop.y -= y / tippyTopReducer;
-      }
+      starfieldBack.y -= y / backDamper;
+      starfieldMid.y -= y / midDamper;
+      starfieldFront.y -= y / frontDamper;
     }
   }
 
   create() {
-    const width = window.innerWidth * 4;
-    const height = window.innerHeight * 4;
-    const { scene } = this;
-    this.starsBack = scene.add.tileSprite(0, 0, width, height, "starsOne");
-    this.starsFront = scene.add.tileSprite(0, 0, width, height, "starsTwo");
-    this.starsMid = scene.add.tileSprite(0, 0, width, height, "starsThree");
-    this.starsTippyTop = scene.add.tileSprite(0, 0, width, height, "starsFour");
+    /* Randomly generate starfield */
+    this.starfieldBack = this.generateStars({
+      numberOfStars: 70,
+      starSize: 2,
+      spaceBetween: 100
+    });
+    this.starfieldMid = this.generateStars({
+      numberOfStars: 40,
+      starSize: 6,
+      spaceBetween: 80
+    });
+    this.starfieldFront = this.generateStars({
+      numberOfStars: 20,
+      starSize: 80,
+      spaceBetween: 60
+    });
 
-    // this.starsBack.setOrigin(0);
-    // this.starsFront.setOrigin(0);
-    // this.starsMid.setOrigin(0);
-    // this.starsTippyTop.setOrigin(0);
+    this.starfields = [
+      this.starfieldBack,
+      this.starfieldMid,
+      this.starfieldFront
+    ];
+
+    this.starfields.forEach((starfield, i) => {
+      /* Set the starting location of the starfield */
+      starfield.x = -window.innerWidth / 2;
+      starfield.y = -window.innerHeight / 2;
+      /* Set the opacity of the starfield */
+      if (i === 0) starfield.alpha = 0.6;
+      if (i === 1) starfield.alpha = 0.8;
+    });
+
+    this.starfieldBack.generateTexture();
   }
 
   update() {
@@ -69,48 +121,3 @@ class Stars extends GameObjects.TileSprite {
 }
 
 export default Stars;
-
-// window.sn = this;
-
-// var w = this.cameras.main.width;
-// var h = this.cameras.main.height;
-
-// var tex = this.textures.createCanvas('sky', w, h / 1.5);
-// var ctx = tex.getContext();
-// var grad = ctx.createLinearGradient(0, 0, 0, h / 1.5);
-// grad.addColorStop(0, '#000001')
-// grad.addColorStop(.5, '#000000');
-// grad.addColorStop(1, '#000010');
-// ctx.fillStyle = grad;
-// ctx.fillRect(0, 0, w, h / 1.5);
-// tex.refresh();
-
-// let sp = this.cameras.main.getWorldPoint(0, 0)
-// this.sky = this.add.image(0, 0, 'sky').setOrigin(0)
-// var stars = []
-// this.stars = stars
-// var i = 0;
-// console.log(sp.x - w, 0, sp.x + w, h * .7)
-// while (i++ < 80)
-//     stars.push(this.add.image(0, 0, _.sample(['star09', 'star08', 'star08', 'star08', 'star08']))
-//         .setScale(Phaser.Math.FloatBetween(.02, .03))
-//         .setRandomPosition(sp.x - w / 2, -(h / 2), sp.x + w, h * 2)
-//         .setAlpha(Phaser.Math.FloatBetween(.2, .7))
-//         .setAngle(Math.random() * Math.PI));
-// this.add.tween({
-//     targets: stars,
-//     angle: () => Phaser.Math.FloatBetween(10, 90),
-//     duration: 3000,
-//     yoyo: true,
-//     repeat: -1,
-//     delay: () => Phaser.Math.Between(20, 3000),
-//     ease: 'Sine.easeInOut',
-//     scaleX: (img) => img.scaleX + Phaser.Math.FloatBetween(-.01, .5),
-//     scaleY: (img) => img.scaleX + Phaser.Math.FloatBetween(-.01, .5),
-//     alpha: () => Phaser.Math.FloatBetween(.3, 1)
-// });
-// this.generateSegment()
-// // this.makeButton()
-// this.velHistory = []
-// this.yHistory = []
-// // this.cameras.main.setFollowOffset(0, -200)

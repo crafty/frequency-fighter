@@ -4,12 +4,11 @@ import GameScene from "./scenes/Game";
 import BootScene from "./scenes/Boot";
 
 class BaseGame extends Game {
-  constructor(word) {
+  constructor() {
     super(config);
     this.scene.add("Boot", BootScene);
     this.scene.add("Game", GameScene);
     this.scene.start("Boot");
-    // this.words = word;
   }
 }
 

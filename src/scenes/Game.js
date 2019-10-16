@@ -1,16 +1,22 @@
-import { Scene } from 'phaser';
-import Player from '../objects/Player';
-import MusicManager from '../objects/MusicManager';
-import Stars from '../objects/Stars';
+import { Scene } from "phaser";
+import Stats from "stats.js";
+import Player from "../objects/Player";
+import MusicManager from "../objects/MusicManager";
+import Stars from "../objects/Stars";
 
 class GameScene extends Scene {
   constructor(key) {
     super(key);
+
+    /* Dev Tools */
+    this.stats = new Stats();
+    this.stats.showPanel(0); // 0 FPS 2 Memory
+    document.body.appendChild(this.stats.dom);
   }
 
   create() {
     // Listen for resize event
-    this.events.on('resize', this.resize, this);
+    this.events.on("resize", this.resize, this);
 
     // Listen for player input
     this.cursors = this.input.keyboard.addKeys({
@@ -22,7 +28,7 @@ class GameScene extends Scene {
       upArrow: Phaser.Input.Keyboard.KeyCodes.UP,
       leftArrow: Phaser.Input.Keyboard.KeyCodes.LEFT,
       rightArrow: Phaser.Input.Keyboard.KeyCodes.RIGHT,
-      downArrow: Phaser.Input.Keyboard.KeyCodes.DOWN,
+      downArrow: Phaser.Input.Keyboard.KeyCodes.DOWN
     });
 
     // Creates everything needed for this scene
@@ -30,8 +36,6 @@ class GameScene extends Scene {
 
     // Set Game Cursor
     this.input.setDefaultCursor(`crosshair`);
-
-    console.log(this /*this.player.body*/);
   }
 
   update() {
@@ -39,20 +43,24 @@ class GameScene extends Scene {
     this.player.update(this.cursors);
 
     // Calling stars.update method for paralaxing
-    //this.stars.update();
+    this.stars.update();
 
     // Update Music Manager
     this.musicManager.update();
+
+    /* Update Stats Dev Tools */
+    this.stats.begin();
+    this.stats.end();
   }
 
   createGameScene() {
     // Add Stars
-    //this.stars = new Stars(this);
+    this.stars = new Stars(this);
 
     // Add Bullets Group
     this.bullets = this.physics.add.group({
-      defaultKey: 'projectile',
-      maxSize: 200,
+      defaultKey: "projectile",
+      maxSize: 200
     });
 
     // Create Our Player
