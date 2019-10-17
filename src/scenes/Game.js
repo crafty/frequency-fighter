@@ -10,8 +10,15 @@ class GameScene extends Scene {
 
     /* Dev Tools */
     this.stats = new Stats();
-    this.stats.showPanel(0); // 0 FPS 2 Memory
+    this.stats.showPanel(0); // 0 FPS
+
+    /* Configure Stats.js dev tools */
+    this.statsTwo = new Stats();
+    this.statsTwo.showPanel(2); // 2 Memory
+    this.statsTwo.domElement.style.cssText =
+      "position:absolute;top:0px;left:80px;";
     document.body.appendChild(this.stats.dom);
+    document.body.appendChild(this.statsTwo.dom);
   }
 
   create() {
@@ -49,8 +56,8 @@ class GameScene extends Scene {
     this.musicManager.update();
 
     /* Update Stats Dev Tools */
-    this.stats.begin();
-    this.stats.end();
+    this.stats.update();
+    this.statsTwo.update();
   }
 
   createGameScene() {
