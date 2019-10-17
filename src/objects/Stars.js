@@ -9,11 +9,9 @@ class Stars extends GameObjects.TileSprite {
     console.log(this);
   }
 
-  generateStars({ numberOfStars, starSize, spaceBetween }) {
+  generateStars({ numberOfStars, starSize, spaceBetween, color }) {
     /* Generate Random Circles (Star Test) On Screen */
-    let starField = this.scene.add.graphics({
-      fillStyle: { color: 0xfaf9f9 }
-    });
+    let starField = this.scene.add.group();
 
     /* Init Vars */
     let counter = 0,
@@ -49,8 +47,13 @@ class Stars extends GameObjects.TileSprite {
       /* Add the star to the stars list and render it to the screen */
       if (!overlapping) {
         stars.push(star);
-        const newStar = new Phaser.Geom.Circle(star.x, star.y, star.r);
-        starField.fillCircleShape(newStar);
+        const newStar = this.scene.add.circle(
+          star.x,
+          star.y,
+          star.r,
+          `0x${color}`
+        );
+        starField.add(newStar);
       }
       counter++;
     }
@@ -59,41 +62,57 @@ class Stars extends GameObjects.TileSprite {
 
   paralaxStars() {
     const { x, y } = this.scene.player.body.velocity;
-    const { starfieldBack, starfieldMid, starfieldFront } = this;
-    const backDamper = 90;
-    const midDamper = 60;
-    const frontDamper = 30;
+    const { starfields } = this;
+    const backDamper = 0.0125;
+    const midDamper = 0.02;
+    const frontDamper = 0.035;
 
     /* Paralax stars if the player moves on the X axis */
     if (x !== 0) {
-      starfieldBack.x -= x / backDamper;
-      starfieldMid.x -= x / midDamper;
-      starfieldFront.x -= x / frontDamper;
+      starfields.forEach((starfield, i) => {
+        starfield.children.each(star => {
+          const damper =
+            (i === 0 && backDamper) ||
+            (i === 1 && midDamper) ||
+            (i === 2 && frontDamper);
+          star.x -= x * damper;
+        });
+      });
     }
     /* Paralax stars if the player moves on the Y axis */
     if (y !== 0) {
-      starfieldBack.y -= y / backDamper;
-      starfieldMid.y -= y / midDamper;
-      starfieldFront.y -= y / frontDamper;
+      starfields.forEach((starfield, i) => {
+        starfield.children.each(star => {
+          const damper =
+            (i === 0 && backDamper) ||
+            (i === 1 && midDamper) ||
+            (i === 2 && frontDamper);
+          star.y -= y * damper;
+        });
+      });
     }
   }
 
   create() {
     /* Randomly generate starfield */
+
     this.starfieldBack = this.generateStars({
-      numberOfStars: 70,
-      starSize: 2,
-      spaceBetween: 100
+      numberOfStars: 125,
+      starSize: 5,
+      spaceBetween: 40,
+      color: "404853"
     });
     this.starfieldMid = this.generateStars({
-      numberOfStars: 40,
-      starSize: 6,
-      spaceBetween: 80
+      numberOfStars: 60,
+      starSize: 13,
+      spaceBetween: 80,
+      color: "637081"
     });
     this.starfieldFront = this.generateStars({
-      numberOfStars: 20,
-      starSize: 80,
-      spaceBetween: 60
+      numberOfStars: 30,
+      starSize: 20,
+      spaceBetween: 120,
+      color: "C6CBD1"
     });
 
     this.starfields = [
@@ -103,15 +122,13 @@ class Stars extends GameObjects.TileSprite {
     ];
 
     this.starfields.forEach((starfield, i) => {
-      /* Set the starting location of the starfield */
-      starfield.x = -window.innerWidth / 2;
-      starfield.y = -window.innerHeight / 2;
-      /* Set the opacity of the starfield */
-      if (i === 0) starfield.alpha = 0.6;
-      if (i === 1) starfield.alpha = 0.8;
+      /* Set the starting location for each star */
+      starfield.children.each(star => {
+        star.x = star.x -= window.innerWidth / 2;
+        star.y = star.y -= window.innerHeight / 2;
+        star.alpha = 0.5;
+      });
     });
-
-    this.starfieldBack.generateTexture();
   }
 
   update() {

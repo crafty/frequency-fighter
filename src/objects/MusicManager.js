@@ -17,7 +17,7 @@ class MusicManager {
     const { scene } = this;
 
     /* Start the song so we have an audio source as an input for nodes */
-    scene.sound.play("queen", { loop: true, volume: 0.3 });
+    scene.sound.play("In The Summer", { volume: 0.2 }); // In The Summer Fireman
     scene.sound.context.createAnalyser();
     /* 
       Audio Analyser 
@@ -28,9 +28,10 @@ class MusicManager {
     this.analyzerNode.source = scene.sound.sounds[0].source;
     this.analyzerNode.source.connect(this.analyzerNode);
 
-    /* Lots of Smoothing, The below 3 items are to help the changes in data be less dramatic, smoothingTimeConstant overlaps values in the data arrays */
+    /* Smoothing and points of data per sample, The below 3 items are to help the changes in data be less dramatic, smoothingTimeConstant overlaps values in the data arrays */
+    /* Modify these to greatly effects the accuracy of the byte data */
     this.analyzerNode.smoothingTimeConstant = 0.5;
-    this.analyzerNode.fftSize = 1024; // 512 2048(default)
+    this.analyzerNode.fftSize = 1024; // 512 1024 2048(default)
 
     this.bufferLength = this.analyzerNode.frequencyBinCount; // frequencyBinCount = half the fftSize
 
@@ -77,14 +78,20 @@ class MusicManager {
       let average =
         this.floatArray.reduce((pV, cV) => (pV += cV)) / this.floatArray.length;
 
-      /* Add dd to the average if you want a higher normalized value */
-      average += 0.3;
-
-      console.log(average);
-
       /* Use the average to set opacity */
-      this.scene.stars.starfieldFront.alpha = average;
-      this.scene.stars.starfieldMid.alpha = average;
+      this.scene.stars.starfields.forEach((starfield, i) => {
+        starfield.children.each(star => {
+          /* Add dd to the average if you want a higher normalized value */
+          star.scale = average + 0.8;
+
+          /* Check if the for threshold and mid/front starfield */
+          if (average > 0.6 && i !== 0) {
+            star.alpha = average + 0.2;
+          } else {
+            star.alpha = 0.5;
+          }
+        });
+      });
     }
   }
 }
