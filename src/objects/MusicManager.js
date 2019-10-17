@@ -1,6 +1,5 @@
 class MusicManager {
   constructor(scene) {
-    //super(scene);
     this.scene = scene;
     this.analyzerNode;
     this.freqTimeData;
@@ -8,6 +7,7 @@ class MusicManager {
     this.bufferLength;
     this.source;
     this.time;
+    this.visualizationAccuracy = 2048; // 512 1024 2048(default) | I will pass this in from a settings option later.
 
     this.create();
     console.log(this);
@@ -17,10 +17,10 @@ class MusicManager {
     const { scene } = this;
 
     /* Start the song so we have an audio source as an input for nodes */
-    scene.sound.play("In The Summer", { volume: 0.2 }); // In The Summer Fireman
+    scene.sound.play("Home", { volume: 0.15 }); // In The Summer | Fireman | Home
     scene.sound.context.createAnalyser();
     /* 
-      Audio Analyser 
+      Audio Analyser Node Setup
     */
     this.analyzerNode = scene.sound.context.createAnalyser();
     this.analyzerNode.audioBuffer = scene.sound.sounds[0].source.buffer;
@@ -28,10 +28,11 @@ class MusicManager {
     this.analyzerNode.source = scene.sound.sounds[0].source;
     this.analyzerNode.source.connect(this.analyzerNode);
 
-    /* Smoothing and points of data per sample, The below 3 items are to help the changes in data be less dramatic, smoothingTimeConstant overlaps values in the data arrays */
-    /* Modify these to greatly effects the accuracy of the byte data */
+    /* fftSize / 2 equals the amount of data points per sample */
+    /* Smoothing overlaps values in the data arrays */
+    /* Modify these to greatly effect the accuracy and smoothness of visualations */
     this.analyzerNode.smoothingTimeConstant = 0.5;
-    this.analyzerNode.fftSize = 1024; // 512 1024 2048(default)
+    this.analyzerNode.fftSize = this.visualizationAccuracy;
 
     this.bufferLength = this.analyzerNode.frequencyBinCount; // frequencyBinCount = half the fftSize
 
@@ -40,7 +41,7 @@ class MusicManager {
   }
 
   byteToNormalizedFloat(srcArray, dstArray) {
-    /* Converts bytes to normalized (0 <-> 1) floats */
+    /* Converts bytes to normalized (0 <-> 1)ish floats */
     const sum = srcArray.reduce((pV, cV) => (pV += cV / 255));
     srcArray.forEach((point, index) => {
       dstArray[index] = sum / srcArray.length;
@@ -49,11 +50,10 @@ class MusicManager {
 
   update() {
     /* ============ NOTES ============ */
-    /* Setting opacity based on feqByteData */
     /* Byte values range between 0 - 255, that maps to -1 <=> +1, s0 128 = 0 */
-    /* getFloatFrequencyData returns dB, getByteFrequencyData maps based on min/max decibels */
+    /* getFloatFrequencyData returns dB, getByteFrequencyData maps based on min/max decibels set on node */
     /* Must use Float32Array instead of Unit8Array for Float arrays */
-    /* Amplitude = sum of freqByteData / (this.bufferLength * 256 - 1); */
+    /* Amplitude = sum of freqByteData (freq / 255) / this.bufferLength  */
     /* ============ NOTES ============ */
 
     /* Update Current Time Of Song */
@@ -69,26 +69,25 @@ class MusicManager {
     /* Convert the byte data to normalized(0 - 1 values) Float32Array */
     this.byteToNormalizedFloat(this.freqByteData, this.floatArray);
 
-    /* Filters 0's out of the float array */
+    /* Filters 0's out of the float array. Doing this seems to create more accurate/steady visuals */
     this.floatArray = this.floatArray.filter(value => value !== 0);
 
     /* Get the average of the normalized data */
-    /* If the foatArray has values */
+    /* If the floatArray has values do stuff, prevents a bug */
     if (this.floatArray.length > 0) {
       let average =
         this.floatArray.reduce((pV, cV) => (pV += cV)) / this.floatArray.length;
 
       /* Use the average to set opacity */
+      /* Add to the average if you want a higher normalized value */
       this.scene.stars.starfields.forEach((starfield, i) => {
+        /* i === starfield | 0 = back | 1 = mid | 2 = front */
         starfield.children.each(star => {
-          /* Add dd to the average if you want a higher normalized value */
-          star.scale = average + 0.8;
-
-          /* Check if the for threshold and mid/front starfield */
-          if (average > 0.6 && i !== 0) {
-            star.alpha = average + 0.2;
+          star.scale = average + 1;
+          if (average > 0.45 && i !== 0) {
+            star.alpha = average + 0.1;
           } else {
-            star.alpha = 0.5;
+            star.alpha = 0.45;
           }
         });
       });

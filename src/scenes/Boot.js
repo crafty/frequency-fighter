@@ -6,6 +6,7 @@ import shipThree from "../assets/images/ship3.png";
 import projectile from "../assets/images/strip.png";
 import InTheSummer from "../assets/music/In The Summer.mp3";
 import Fireman from "../assets/music/Fireman.mp3";
+import Home from "../assets/music/Home.mp3";
 
 class BootScene extends Scene {
   constructor(key) {
@@ -22,6 +23,7 @@ class BootScene extends Scene {
     /* Preload Audio */
     this.load.audio("In The Summer", InTheSummer);
     this.load.audio("Fireman", Fireman);
+    this.load.audio("Home", Home);
   }
 
   create() {
