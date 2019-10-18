@@ -17,7 +17,7 @@ class MusicManager {
     const { scene } = this;
 
     /* Start the song so we have an audio source as an input for nodes */
-    scene.sound.play("Home", { volume: 0.15 }); // In The Summer | Fireman | Home
+    scene.sound.play("In The Summer", { volume: 0.05 }); // In The Summer | Fireman | Home
     scene.sound.context.createAnalyser();
     /* 
       Audio Analyser Node Setup
@@ -83,14 +83,20 @@ class MusicManager {
       this.scene.stars.starfields.forEach((starfield, i) => {
         /* i === starfield | 0 = back | 1 = mid | 2 = front */
         starfield.children.each(star => {
-          star.scale = average + 1;
-          if (average > 0.45 && i !== 0) {
-            star.alpha = average + 0.1;
+          if (i === 0) star.scale = average + starfield.baseScale + 0.05;
+          if (i === 1) star.scale = average + starfield.baseScale + 0.1;
+          if (i === 2) star.scale = average + starfield.baseScale + 0.2;
+
+          if (average < 0.3) {
+            star.alpha = 0.5;
           } else {
-            star.alpha = 0.45;
+            star.alpha = average + 0.2;
           }
         });
       });
+
+      /* Set Player glow Values based on beat */
+      this.scene.player.glow.setAlpha(average);
     }
   }
 }

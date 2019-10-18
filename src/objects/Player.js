@@ -1,5 +1,6 @@
 import { Physics } from "phaser";
 import throttle from "lodash/throttle";
+import playerGlowConfig from "../assets/particles/playerGlow.json";
 
 class Player extends Physics.Arcade.Image {
   constructor(scene, x, y) {
@@ -28,6 +29,12 @@ class Player extends Physics.Arcade.Image {
     // Set Player Collision
     this.body.collideWorldBounds = true;
     this.body.bounce.setTo(0.3, 0.3);
+
+    // Set Player Screen Depth
+    this.depth = 100;
+
+    // Player Glow
+    this.playerGlow();
 
     console.log(this);
   }
@@ -75,6 +82,12 @@ class Player extends Physics.Arcade.Image {
     }
   }
 
+  playerGlow() {
+    this.glow = this.scene.add
+      .particles("redFlare")
+      .createEmitter({ ...playerGlowConfig, x: this.x, y: this.y });
+  }
+
   update(cursors) {
     // Reset Player Velocity
     this.setAcceleration(0, 0);
@@ -120,6 +133,9 @@ class Player extends Physics.Arcade.Image {
         }
       }
     });
+
+    /* Keep player glow on the player */
+    this.glow.setPosition(this.x, this.y);
   }
 }
 
