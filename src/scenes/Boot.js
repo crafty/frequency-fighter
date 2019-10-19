@@ -18,7 +18,7 @@ class BootScene extends Scene {
     /* I wrapped this in a timeout to help fonts load before booting, look into a better fix later */
     setTimeout(() => this.scene.start("PreLoader"), 1200);
     setTimeout(
-      () => this.sound.play("ChanceRoses", { volume: 0.5, loop: true }),
+      () => this.sound.play("ChanceRoses", { volume: 1, loop: true }),
       1200
     );
   }
