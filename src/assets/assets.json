@@ -18,8 +18,13 @@
       },
       {
         "type": "audio",
-        "key": "home",
+        "key": "Home",
         "url": "src/assets/music/Home.mp3"
+      },
+      {
+        "type": "audio",
+        "key": "Reach Out",
+        "url": "src/assets/music/Reach Out.mp3"
       },
       {
         "type": "image",

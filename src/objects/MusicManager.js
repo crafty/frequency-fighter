@@ -89,7 +89,7 @@ class MusicManager {
       /* Set the average of the normalized data */
       let average =
         this.floatArray.reduce((pV, cV) => (pV += cV)) / this.floatArray.length;
-
+      console.log(this.time);
       this.averageAmplitude = average;
     }
   }

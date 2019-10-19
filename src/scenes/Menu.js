@@ -1,10 +1,23 @@
 import { Scene } from "phaser";
 import Stars from "../objects/Stars";
+import Stats from "stats.js";
 import MusicManager from "../objects/MusicManager";
 
 class MenuScene extends Scene {
   constructor(key) {
     super(key);
+    /* Configure Stats.js dev tools */
+    this.statsOne = new Stats();
+    this.statsOne.showPanel(0); // 0 FPS
+
+    this.statsTwo = new Stats();
+    this.statsTwo.showPanel(2); // 2 Memory
+
+    document.body.appendChild(this.statsOne.dom);
+    document.body.appendChild(this.statsTwo.dom);
+
+    this.statsTwo.domElement.style.cssText =
+      "position:absolute;top:0px;left:80px;";
 
     console.log(this);
   }
@@ -49,6 +62,10 @@ class MenuScene extends Scene {
   update() {
     this.stars.update();
     this.musicManager.update();
+
+    /* Update Stats Dev Tools */
+    this.statsOne.update();
+    this.statsTwo.update();
   }
 }
 

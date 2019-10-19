@@ -220,7 +220,7 @@ class Stars extends GameObjects.TileSprite {
   }
 
   animateMenu() {
-    const { averageAmplitude = 0.3 } = this.scene.musicManager;
+    const { averageAmplitude = 0, floatArray } = this.scene.musicManager;
 
     this.menuStars.children.each(star => {
       star.y += star.speed;
