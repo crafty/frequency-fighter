@@ -1,4 +1,4 @@
-# Frequency Fighter
+# Frequency Fighter :alien:
 
 Annoy your space neighbors as you crank the decibels and blast away evil to the tune of your favorite songs. All ships include a volume nob that goes to 11 when you need that extra push over the cliff. 
 
