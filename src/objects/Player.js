@@ -136,6 +136,10 @@ class Player extends Physics.Arcade.Image {
 
     /* Keep player glow on the player */
     this.glow.setPosition(this.x, this.y);
+
+    /* Animate Glow */
+    const { averageAmplitude = 0 } = this.scene.musicManager;
+    this.glow.setAlpha(averageAmplitude);
   }
 }
 

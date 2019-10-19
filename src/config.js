@@ -5,7 +5,7 @@ export default {
   parent: "phaser-game",
   width: window.innerWidth,
   height: window.innerHeight,
-  backgroundColor: "#14151d",
+  backgroundColor: "#131112",
   physics: {
     default: "arcade",
     arcade: {

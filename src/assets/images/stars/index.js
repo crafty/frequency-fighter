@@ -3,5 +3,6 @@ import StarTwo from "./Star - White - 2.png";
 import StarThree from "./Star - Yellow.png";
 import StarFour from "./Star - Blue - 1.png";
 import StarFive from "./Star - Purple.png";
+import StarSix from "./Star - Red.png";
 
-export { StarOne, StarTwo, StarThree, StarFour, StarFive };
+export { StarOne, StarTwo, StarThree, StarFour, StarFive, StarSix };

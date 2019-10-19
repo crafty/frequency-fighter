@@ -1,48 +1,43 @@
 import { Scene } from "phaser";
-
-/* Import assets */
-import shipTwo from "../assets/images/ship2.png";
-import shipThree from "../assets/images/ship3.png";
-import projectile from "../assets/images/projectile.png";
+import Stats from "stats.js";
 import InTheSummer from "../assets/music/In The Summer.mp3";
-import Fireman from "../assets/music/Fireman.mp3";
-import Home from "../assets/music/Home.mp3";
-
-/* Particles */
-import RedFlare from "../assets/particles/redFlare.png";
-import * as Stars from "../assets/images/stars";
+import OliverTreeHurt from "../assets/music/Oliver Tree - Hurt.mp3";
 
 class BootScene extends Scene {
   constructor(key) {
     super(key);
+
+    /* Configure Stats.js dev tools */
+    this.statsOne = new Stats();
+    this.statsOne.showPanel(0); // 0 FPS
+
+    this.statsTwo = new Stats();
+    this.statsTwo.showPanel(2); // 2 Memory
+
+    document.body.appendChild(this.statsOne.dom);
+    document.body.appendChild(this.statsTwo.dom);
+
+    this.statsTwo.domElement.style.cssText =
+      "position:absolute;top:0px;left:80px;";
+
+    console.log(this);
   }
 
   preload() {
-    /* Preload Images */
-    this.load.image("projectile", projectile);
-    this.load.image("shipTwo", shipTwo);
-    this.load.image("shipThree", shipThree);
-
-    /* Preload Audio */
-    this.load.audio("In The Summer", InTheSummer);
-    this.load.audio("Fireman", Fireman);
-    this.load.audio("Home", Home);
-
-    /* Particle Effects */
-    this.load.image("redFlare", RedFlare);
-
-    /* Import All Stars */
-    this.load.image("Star - White - 1", Stars.StarOne);
-    this.load.image("Star - White - 2", Stars.StarTwo);
-    this.load.image("Star - Yellow", Stars.StarThree);
-    this.load.image("Star - Blue - 1", Stars.StarFour);
-    this.load.image("Star - Purple", Stars.StarFive);
+    this.load.audio("OliverTreeHurt", OliverTreeHurt);
   }
 
   create() {
-    this.scene.start(
-      "Game" /*{ level: 1, newGame: true, levels: this.levels }*/
-    );
+    this.sound.play("OliverTreeHurt", { volume: 0.3 });
+
+    /* Stars PreLoader */
+    this.scene.start("PreLoader");
+  }
+
+  update() {
+    /* Update Stats Dev Tools */
+    this.statsOne.update();
+    this.statsTwo.update();
   }
 }
 

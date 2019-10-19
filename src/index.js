@@ -1,13 +1,14 @@
 import { Game } from "phaser";
 import config from "./config";
-import GameScene from "./scenes/Game";
-import BootScene from "./scenes/Boot";
+import * as Scenes from "./scenes";
 
 class BaseGame extends Game {
   constructor() {
     super(config);
-    this.scene.add("Boot", BootScene);
-    this.scene.add("Game", GameScene);
+    this.scene.add("Boot", Scenes.BootScene);
+    this.scene.add("Game", Scenes.GameScene);
+    this.scene.add("Menu", Scenes.MenuScene);
+    this.scene.add("PreLoader", Scenes.PreLoader);
     this.scene.start("Boot");
   }
 }

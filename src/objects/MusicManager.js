@@ -1,31 +1,43 @@
 class MusicManager {
   constructor(scene) {
+    this.key = "MusicManager";
     this.scene = scene;
+    this.scene.add.existing(this);
     this.analyzerNode;
     this.freqTimeData;
     this.freqByteData;
     this.bufferLength;
     this.source;
     this.time;
+    this.averageAmplitude;
     this.visualizationAccuracy = 2048; // 512 1024 2048(default) | I will pass this in from a settings option later.
 
-    this.create();
     console.log(this);
   }
 
-  create() {
+  create(song) {
     const { scene } = this;
-
     /* Start the song so we have an audio source as an input for nodes */
-    scene.sound.play("In The Summer", { volume: 0.05 }); // In The Summer | Fireman | Home
     scene.sound.context.createAnalyser();
     /* 
       Audio Analyser Node Setup
     */
     this.analyzerNode = scene.sound.context.createAnalyser();
-    this.analyzerNode.audioBuffer = scene.sound.sounds[0].source.buffer;
-    this.analyzerNode.duration = scene.sound.sounds[0].source.buffer.duration;
-    this.analyzerNode.source = scene.sound.sounds[0].source;
+
+    if (song) {
+      this.scene.sound.play("Fireman", { volume: 0.3 });
+      const { source } = scene.sound.sounds.find(songs => songs.key === song);
+
+      this.analyzerNode.audioBuffer = source.buffer;
+      this.analyzerNode.duration = source.buffer.duration;
+      this.analyzerNode.source = source;
+    } else {
+      /* This is only for the main menu */
+      this.analyzerNode.audioBuffer = scene.sound.sounds[0].source.buffer;
+      this.analyzerNode.duration = scene.sound.sounds[0].source.buffer.duration;
+      this.analyzerNode.source = scene.sound.sounds[0].source;
+    }
+
     this.analyzerNode.source.connect(this.analyzerNode);
 
     /* fftSize / 2 equals the amount of data points per sample */
@@ -72,31 +84,13 @@ class MusicManager {
     /* Filters 0's out of the float array. Doing this seems to create more accurate/steady visuals */
     this.floatArray = this.floatArray.filter(value => value !== 0);
 
-    /* Get the average of the normalized data */
     /* If the floatArray has values do stuff, prevents a bug */
     if (this.floatArray.length > 0) {
+      /* Set the average of the normalized data */
       let average =
         this.floatArray.reduce((pV, cV) => (pV += cV)) / this.floatArray.length;
 
-      /* Use the average to set opacity */
-      /* Add to the average if you want a higher normalized value */
-      this.scene.stars.starfields.forEach((starfield, i) => {
-        /* i === starfield | 0 = back | 1 = mid | 2 = front */
-        starfield.children.each(star => {
-          if (i === 0) star.scale = average + starfield.baseScale + 0.05;
-          if (i === 1) star.scale = average + starfield.baseScale + 0.1;
-          if (i === 2) star.scale = average + starfield.baseScale + 0.2;
-
-          if (average < 0.3) {
-            star.alpha = 0.5;
-          } else {
-            star.alpha = average + 0.2;
-          }
-        });
-      });
-
-      /* Set Player glow Values based on beat */
-      this.scene.player.glow.setAlpha(average);
+      this.averageAmplitude = average;
     }
   }
 }

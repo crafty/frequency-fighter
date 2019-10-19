@@ -1,13 +1,12 @@
 import { Scene } from "phaser";
-import Stats from "stats.js";
 import Player from "../objects/Player";
-import MusicManager from "../objects/MusicManager";
 import Stars from "../objects/Stars";
+import Stats from "stats.js";
+import MusicManager from "../objects/MusicManager";
 
 class GameScene extends Scene {
   constructor(key) {
     super(key);
-
     /* Dev Tools */
     this.stats = new Stats();
     this.stats.showPanel(0); // 0 FPS
@@ -19,6 +18,13 @@ class GameScene extends Scene {
       "position:absolute;top:0px;left:80px;";
     document.body.appendChild(this.stats.dom);
     document.body.appendChild(this.statsTwo.dom);
+
+    console.log(this);
+  }
+
+  preload() {
+    this.musicManager = new MusicManager(this);
+    this.musicManager.create("Fireman");
   }
 
   create() {
@@ -50,9 +56,8 @@ class GameScene extends Scene {
     this.player.update(this.cursors);
 
     // Calling stars.update method for paralaxing
-    this.stars.update();
+    this.stars.update(this);
 
-    // Update Music Manager
     this.musicManager.update();
 
     /* Update Stats Dev Tools */
@@ -62,7 +67,9 @@ class GameScene extends Scene {
 
   createGameScene() {
     // Add Stars
-    this.stars = new Stars(this);
+    this.stars = new Stars(this, {
+      sceneName: "GameScene"
+    });
 
     // Add Bullets Group
     this.bullets = this.physics.add.group({
@@ -76,9 +83,6 @@ class GameScene extends Scene {
       window.innerWidth / 2,
       window.innerHeight / 2
     );
-
-    // Create Music Manager
-    this.musicManager = new MusicManager(this);
   }
 
   resize(width, height) {
