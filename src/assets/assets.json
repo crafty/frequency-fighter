@@ -1,0 +1,113 @@
+{
+  "packOne": {
+    "files": [
+      {
+        "type": "audio",
+        "key": "Fireman",
+        "url": "src/assets/music/Fireman.mp3"
+      },
+      {
+        "type": "audio",
+        "key": "In The Summer",
+        "url": "src/assets/music/In The Summer.mp3"
+      },
+      {
+        "type": "audio",
+        "key": "Hurt",
+        "url": "src/assets/music/Oliver Tree - Hurt.mp3"
+      },
+      {
+        "type": "audio",
+        "key": "home",
+        "url": "src/assets/music/Home.mp3"
+      },
+      {
+        "type": "image",
+        "key": "redFlare",
+        "url": "src/assets/particles/redFlare.png"
+      },
+      {
+        "type": "image",
+        "key": "shipTwo",
+        "url": "src/assets/images/ship2.png"
+      },
+      {
+        "type": "image",
+        "key": "shipThree",
+        "url": "src/assets/images/ship3.png"
+      },
+      {
+        "type": "image",
+        "key": "projectile",
+        "url": "src/assets/images/projectile.png"
+      },
+      {
+        "type": "image",
+        "key": "NebulaOne",
+        "url": "src/assets/images/nebulas/Nebula1.png"
+      },
+      {
+        "type": "image",
+        "key": "NebulaTwo",
+        "url": "src/assets/images/nebulas/Nebula2.png"
+      },
+      {
+        "type": "image",
+        "key": "NebulaThree",
+        "url": "src/assets/images/nebulas/Nebula3.png"
+      },
+      {
+        "type": "image",
+        "key": "NebulaFour",
+        "url": "src/assets/images/nebulas/Nebula4.png"
+      },
+      {
+        "type": "image",
+        "key": "NebulaFive",
+        "url": "src/assets/images/nebulas/Nebula5.png"
+      },
+      {
+        "type": "image",
+        "key": "NebulaSix",
+        "url": "src/assets/images/nebulas/Nebula6.png"
+      },
+      {
+        "type": "image",
+        "key": "Star - White - 1",
+        "url": "src/assets/images/stars/Star - White - 1.png"
+      },
+      {
+        "type": "image",
+        "key": "Star - White - 2",
+        "url": "src/assets/images/stars/Star - White - 2.png"
+      },
+      {
+        "type": "image",
+        "key": "Star - Yellow",
+        "url": "src/assets/images/stars/Star - Yellow.png"
+      },
+      {
+        "type": "image",
+        "key": "Star - Blue - 1",
+        "url": "src/assets/images/stars/Star - Blue - 1.png"
+      },
+      {
+        "type": "image",
+        "key": "Star - Purple",
+        "url": "src/assets/images/stars/Star - Purple.png"
+      },
+      {
+        "type": "image",
+        "key": "Star - Red",
+        "url": "src/assets/images/stars/Star - Red.png"
+      }
+    ]
+  },
+  "meta": {
+    "generated": "1401380327373",
+    "app": "Phaser 3 Asset Packer",
+    "url": "https://phaser.io",
+    "version": "1.0",
+    "copyright": "Photon Storm Ltd. 2018"
+  }
+}

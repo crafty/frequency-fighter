@@ -1,6 +1,6 @@
 import { Scene } from "phaser";
 import Stats from "stats.js";
-import InTheSummer from "../assets/music/In The Summer.mp3";
+import assetsConfig from "../assets/assets.json";
 import OliverTreeHurt from "../assets/music/Oliver Tree - Hurt.mp3";
 
 class BootScene extends Scene {
@@ -25,10 +25,11 @@ class BootScene extends Scene {
 
   preload() {
     this.load.audio("OliverTreeHurt", OliverTreeHurt);
+    this.load.json("assets", assetsConfig);
   }
 
   create() {
-    this.sound.play("OliverTreeHurt", { volume: 0.3 });
+    this.sound.play("OliverTreeHurt", { volume: 0 });
 
     /* Stars PreLoader */
     this.scene.start("PreLoader");

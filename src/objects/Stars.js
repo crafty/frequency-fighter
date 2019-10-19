@@ -215,6 +215,7 @@ class Stars extends GameObjects.TileSprite {
       star.alpha = 1;
       star.y = star.y -= this.screenHeight * 2;
       star.speed = random(2, 6);
+      star.rotationSpeed = random(-0.02, 0.02);
     });
   }
 
@@ -223,23 +224,20 @@ class Stars extends GameObjects.TileSprite {
 
     this.menuStars.children.each(star => {
       star.y += star.speed;
+      if (star.y > this.screenHeight + 300) {
+        star.y = random(-100, -this.screenHeight);
+      }
+
+      if (averageAmplitude < 0.3) {
+        star.alpha = 0.5;
+      } else {
+        star.alpha = averageAmplitude + 0.2;
+      }
+
+      star.scale = averageAmplitude + 0.2;
+
+      star.rotation += star.rotationSpeed;
     });
-
-    // /* Use the average amplitude to set opacity */
-    // this.starfields.forEach((starfield, i) => {
-    //   /* i === starfield | 0 = back | 1 = mid | 2 = front */
-    //   starfield.children.each(star => {
-    //     if (i === 0) star.scale = averageAmplitude + starfield.baseScale + 0.02;
-    //     if (i === 1) star.scale = averageAmplitude + starfield.baseScale + 0.03;
-    //     if (i === 2) star.scale = averageAmplitude + starfield.baseScale + 0.05;
-
-    //     if (averageAmplitude < 0.3) {
-    //       star.alpha = 0.5;
-    //     } else {
-    //       star.alpha = averageAmplitude + 0.2;
-    //     }
-    //   });
-    // });
   }
 
   createNebulas() {
@@ -279,7 +277,6 @@ class Stars extends GameObjects.TileSprite {
     const damper = 0.013; //0.0125;
 
     /* Paralax Nebulas if the player moves on the X axis */
-
     if (x !== 0) {
       nebulas.forEach(nebula => {
         nebula.x -= x * damper;

@@ -1,26 +1,8 @@
 import { Scene } from "phaser";
 
-/* Particles */
-import RedFlare from "../assets/particles/redFlare.png";
-
-/* Import assets */
-import shipTwo from "../assets/images/ship2.png";
-import shipThree from "../assets/images/ship3.png";
-import projectile from "../assets/images/projectile.png";
-import OliverTreeHurt from "../assets/music/Oliver Tree - Hurt.mp3";
-import InTheSummer from "../assets/music/In The Summer.mp3";
-import Fireman from "../assets/music/Fireman.mp3";
-import Home from "../assets/music/Home.mp3";
-
-import * as Nebulas from "../assets/images/nebulas";
-import * as Stars from "../assets/images/stars";
-
 export default class PreLoader extends Scene {
-  constructor() {
-    super({
-      key: "PreLoader",
-      files: [{ type: "json", key: "assets", url: "../assets/assets.json" }]
-    });
+  constructor(key) {
+    super(key);
   }
 
   preload() {
@@ -97,11 +79,7 @@ export default class PreLoader extends Scene {
     });
 
     this.load.on("fileprogress", file => {
-      const formatedName = `${file.src.substring(0, 8)}${file.src.substring(
-        file.src.indexOf("."),
-        file.src.length
-      )}`;
-      this.assetText.setText(`Asset: ${formatedName}`);
+      this.assetText.setText(`Asset: ${file.key}.${file.type}`);
       this.loadingText.setText(`LOADING...`);
       this.nameText.setText(`dancraycraft.dev`);
     });
@@ -115,43 +93,15 @@ export default class PreLoader extends Scene {
       yoyo: false
     });
 
-    this.load.on("complete", () => this.clear());
+    this.load.on("complete", () => {
+      this.progressBar.destroy();
+      this.progressBox.destroy();
+      this.loadingText.destroy();
+      this.percentText.destroy();
+    });
 
-    /* Preload Images */
-    this.load.image("projectile", projectile);
-    this.load.image("shipTwo", shipTwo);
-    this.load.image("shipThree", shipThree);
-
-    /* Preload Audio */
-    this.load.audio("In The Summer", InTheSummer);
-    this.load.audio("Hurt", OliverTreeHurt);
-    this.load.audio("Fireman", Fireman);
-    this.load.audio("Home", Home);
-
-    /* Particle Effects */
-    this.load.image("redFlare", RedFlare);
-
-    /* Import All Stars */
-    this.load.image("Star - White - 1", Stars.StarOne);
-    this.load.image("Star - White - 2", Stars.StarTwo);
-    this.load.image("Star - Yellow", Stars.StarThree);
-    this.load.image("Star - Blue - 1", Stars.StarFour);
-    this.load.image("Star - Purple", Stars.StarFive);
-    this.load.image("Star - Red", Stars.StarSix);
-
-    /* Nebulas */
-    this.load.image("NebulaOne", Nebulas.NebulaOne);
-    this.load.image("NebulaTwo", Nebulas.NebulaTwo);
-    this.load.image("NebulaThree", Nebulas.NebulaThree);
-    this.load.image("NebulaFour", Nebulas.NebulaFour);
-    this.load.image("NebulaSix", Nebulas.NebulaSix);
-  }
-
-  clear() {
-    this.progressBar.destroy();
-    this.progressBox.destroy();
-    this.loadingText.destroy();
-    this.percentText.destroy();
+    /* Preload Game Assets */
+    this.load.pack("packOne", this.cache.json.get("assets"));
   }
 
   create() {
