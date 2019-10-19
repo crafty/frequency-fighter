@@ -91,7 +91,6 @@ class MenuScene extends Scene {
       this.bar.clear();
       for (let i = 0; i < trimmedArray.length; i++) {
         let value = freqByteData[i];
-        console.log(value);
         let barHeight = value === 0 ? 10 : value;
         barHeight = barHeight / 3 > 60 ? 60 : barHeight;
         this.bar

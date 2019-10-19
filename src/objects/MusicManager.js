@@ -16,6 +16,7 @@ class MusicManager {
   }
 
   create(song) {
+    console.log(song);
     const { scene } = this;
     /* Start the song so we have an audio source as an input for nodes */
     scene.sound.context.createAnalyser();
@@ -25,7 +26,7 @@ class MusicManager {
     this.analyzerNode = scene.sound.context.createAnalyser();
 
     if (song) {
-      this.scene.sound.play("Fireman", { volume: 0.3 });
+      this.scene.sound.play(song, { volume: 0.3 });
       const { source } = scene.sound.sounds.find(songs => songs.key === song);
 
       this.analyzerNode.audioBuffer = source.buffer;

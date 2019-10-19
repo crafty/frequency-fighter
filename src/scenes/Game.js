@@ -24,7 +24,7 @@ class GameScene extends Scene {
 
   preload() {
     this.musicManager = new MusicManager(this);
-    this.musicManager.create("Fireman");
+    this.musicManager.create("Paak");
   }
 
   create() {
