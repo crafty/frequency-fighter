@@ -63,11 +63,6 @@
       },
       {
         "type": "image",
-        "key": "NebulaFive",
-        "url": "src/assets/images/nebulas/Nebula5.png"
-      },
-      {
-        "type": "image",
         "key": "NebulaSix",
         "url": "src/assets/images/nebulas/Nebula6.png"
       },
