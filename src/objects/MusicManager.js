@@ -72,7 +72,7 @@ class MusicManager {
     this.time = this.analyzerNode.context.currentTime;
 
     /* Update the AnalyzerNodes Data */
-    //this.analyzerNode.getByteTimeDomainData(this.freqTimeData);
+    this.analyzerNode.getByteTimeDomainData(this.freqTimeData);
     this.analyzerNode.getByteFrequencyData(this.freqByteData);
 
     /* Create a float 32 array */
@@ -89,7 +89,6 @@ class MusicManager {
       /* Set the average of the normalized data */
       let average =
         this.floatArray.reduce((pV, cV) => (pV += cV)) / this.floatArray.length;
-      console.log(this.time);
       this.averageAmplitude = average;
     }
   }

@@ -13,11 +13,6 @@
       },
       {
         "type": "audio",
-        "key": "Hurt",
-        "url": "src/assets/music/Oliver Tree - Hurt.mp3"
-      },
-      {
-        "type": "audio",
         "key": "Home",
         "url": "src/assets/music/Home.mp3"
       },
@@ -25,6 +20,21 @@
         "type": "audio",
         "key": "Reach Out",
         "url": "src/assets/music/Reach Out.mp3"
+      },
+      {
+        "type": "audio",
+        "key": "Paak",
+        "url": "src/assets/music/Paak.mp3"
+      },
+      {
+        "type": "audio",
+        "key": "ChanceRoses",
+        "url": "src/assets/music/ChanceRoses.mp3"
+      },
+      {
+        "type": "audio",
+        "key": "MacMiller",
+        "url": "src/assets/music/MacMiller.mp3"
       },
       {
         "type": "image",

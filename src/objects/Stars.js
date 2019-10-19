@@ -198,7 +198,7 @@ class Stars extends GameObjects.TileSprite {
   ceateMenuStars() {
     this.menuStars = this.generateStars({
       placement: "back",
-      numberOfStars: 300,
+      numberOfStars: 250,
       scale: 1,
       spaceBetween: 20,
       images: [

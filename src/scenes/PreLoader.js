@@ -93,18 +93,22 @@ export default class PreLoader extends Scene {
       yoyo: false
     });
 
-    this.load.on("complete", () => {
-      this.progressBar.destroy();
-      this.progressBox.destroy();
-      this.loadingText.destroy();
-      this.percentText.destroy();
-    });
-
     /* Preload Game Assets */
     this.load.pack("packOne", this.cache.json.get("assets"));
+
+    setTimeout(() => this.loadingText.updateText(), 100);
+  }
+
+  clear() {
+    this.progressBar.destroy();
+    this.progressBox.destroy();
+    this.loadingText.destroy();
+    this.percentText.destroy();
   }
 
   create() {
-    this.scene.start("Menu");
+    setTimeout(() => this.scene.start("Menu"), 300);
+
+    setTimeout(() => this.clear(), 400);
   }
 }
